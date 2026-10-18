@@ -14,4 +14,4 @@ Responda em português, direto e curto.
 ## Contexto do Projeto
 - Projeto: CANECA+ (Oficina Virtual de Sublimação 3D).
 - Stack: Python (Flask), Three.js (r128), GSAP, Vanilla CSS, Web Audio API.
-- Servidor local: `http://localhost:5000`.
+- Servidor ONRENDER: https://site-canecas-personalizadas-1.onrender.com/
