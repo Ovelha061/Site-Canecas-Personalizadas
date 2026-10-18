@@ -1,0 +1,1561 @@
+/* ==========================================================================
+   CANECA+ | OFICINA DE SUBLIMAÇÃO VIRTUAL 3D
+   Design System: Tátil, Mecânico, Industrial & Glassmorphism
+   ========================================================================== */
+
+:root {
+  /* Cores Principais */
+  --bg-workshop: #0e0f12;
+  --border-card: rgba(255, 255, 255, 0.08);
+
+  /* Materiais da bancada: chapa de metal grafite, etiqueta creme e o
+     vermelho da manopla da prensa (cor do botão de prensar) */
+  --metal-chapa: linear-gradient(180deg, #222328 0%, #1a1b1f 100%);
+  --metal-borda: rgba(255, 255, 255, 0.07);
+  --metal-parafuso: #45474e;
+  --creme-etiqueta: #ece7da;
+  --vermelho-alavanca: #c8262b;
+
+  --color-ivory: #f2f2f7;
+  --color-ash: #9e9ea8;
+  --color-cobalt: #5266eb;
+  
+  /* Indicadores e LEDs Industriais */
+  --led-amber: #ff9e00;
+  --led-amber-glow: rgba(255, 158, 0, 0.6);
+  --led-green: #00e676;
+  --led-green-glow: rgba(0, 230, 118, 0.6);
+  --led-red: #ff3344;
+  --tape-blue: #2979ff;
+
+  /* Tipografia */
+  --font-main: 'Archivo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-led: 'VT323', monospace;
+
+  /* Curvas e Animações */
+  --radius-card: 18px;
+  --radius-pill: 40px;
+  --ease-mechanical: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Desaceleração suave (ease-out-quart), sem quicar */
+  --ease-spring: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Base Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background-color: var(--bg-workshop);
+  color: var(--color-ivory);
+  font-family: var(--font-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+body.modo-oficina {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 20%, #1d1e23 0%, #0e0f12 75%);
+}
+
+/* Foco do teclado visível e consistente em todos os controles */
+:focus-visible {
+  outline: 2px solid var(--creme-etiqueta);
+  outline-offset: 3px;
+}
+
+/* Seleção de texto nas cores da bancada */
+::selection {
+  background: rgba(255, 158, 0, 0.35);
+  color: #fff;
+}
+
+/* Ícones desenhados (folha de ícones no topo do HTML) */
+.icone {
+  width: 1.15em;
+  height: 1.15em;
+  flex-shrink: 0;
+  vertical-align: -0.2em;
+}
+
+/* 1. Header / Barra da Oficina */
+.oficina-header {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 1100px;
+  padding: 10px 18px;
+  background: var(--metal-chapa);
+  border: 1px solid var(--metal-borda);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--color-ivory);
+}
+
+.logo-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.14);
+  transition: transform 0.4s var(--ease-spring);
+}
+
+.brand-link:hover .logo-badge {
+  transform: rotate(-10deg) scale(1.08);
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.brand-title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.brand-plus {
+  color: var(--color-cobalt);
+  font-weight: 800;
+  margin-left: 2px;
+}
+
+.brand-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-ash);
+  letter-spacing: 0.12em;
+}
+
+.header-dir {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-tatil {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-card);
+  color: var(--color-ash);
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-tatil:hover {
+  color: var(--color-ivory);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-whatsapp-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #1fa855, #168a44);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.btn-whatsapp-header:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #22b55c, #189449);
+}
+
+/* 2. Main Workbench (Palco Principal) */
+.oficina-workbench {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: 84px;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* 3. Viewport 3D da Prensa e Caneca */
+.viewport-container {
+  position: relative;
+  width: 100%;
+  height: clamp(380px, 48vh, 560px);
+  /* Não deixa o palco 3D encolher até sumir quando o conteúdo é maior que a tela */
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#canvas-3d {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+#canvas-3d:active {
+  cursor: grabbing;
+}
+
+#canvas-3d canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.dica-flutuante {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(14, 15, 18, 0.85);
+  border: 1px solid var(--metal-borda);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  color: var(--color-ash);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Estúdio noturno (luminária acesa): as bordas do palco 3D escurecem */
+.viewport-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(ellipse 55% 65% at 50% 50%, transparent 40%, rgba(4, 4, 7, 0.72) 100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+
+.viewport-container.noturno::after {
+  opacity: 1;
+}
+
+/* Vapor Animado da Sublimação */
+.steam-container {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160px;
+  height: 160px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.steam-container.ativo {
+  opacity: 1;
+}
+
+.steam-container span {
+  position: absolute;
+  bottom: 0;
+  width: 22px;
+  height: 90px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  filter: blur(14px);
+  animation: vaporSublimacao 2.2s ease-in infinite;
+}
+
+.steam-container span:nth-child(1) { left: 15px; animation-delay: 0s; }
+.steam-container span:nth-child(2) { left: 45px; animation-delay: 0.4s; }
+.steam-container span:nth-child(3) { left: 75px; animation-delay: 0.9s; }
+.steam-container span:nth-child(4) { left: 105px; animation-delay: 1.3s; }
+.steam-container span:nth-child(5) { left: 135px; animation-delay: 1.7s; }
+
+@keyframes vaporSublimacao {
+  0% { transform: translateY(20px) scaleX(1); opacity: 0; }
+  35% { opacity: 0.85; }
+  100% { transform: translateY(-110px) scaleX(2.2); opacity: 0; }
+}
+
+/* Clarão Térmico de Sublimação */
+.heat-glow-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 100, 30, 0.12) 0%, transparent 65%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.heat-glow-overlay.aquecendo {
+  opacity: 1;
+}
+
+/* 4. Painel de Controle da Bancada (HUD Cards) */
+.oficina-hud {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  z-index: 10;
+}
+
+/* Cada cartão é um painel de chapa da máquina, com parafusos nos cantos */
+.card-painel {
+  background:
+    radial-gradient(circle at 12px 12px, var(--metal-parafuso) 0 2.5px, transparent 3px),
+    radial-gradient(circle at calc(100% - 12px) 12px, var(--metal-parafuso) 0 2.5px, transparent 3px),
+    radial-gradient(circle at 12px calc(100% - 12px), var(--metal-parafuso) 0 2.5px, transparent 3px),
+    radial-gradient(circle at calc(100% - 12px) calc(100% - 12px), var(--metal-parafuso) 0 2.5px, transparent 3px),
+    var(--metal-chapa);
+  border: 1px solid var(--metal-borda);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: border-color 0.3s ease, transform 0.3s var(--ease-mechanical);
+}
+
+
+.painel-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.passo-numero {
+  /* Plaquinha estampada, como as etiquetas de máquina */
+  width: 26px;
+  height: 26px;
+  border-radius: 5px;
+  background: var(--creme-etiqueta);
+  color: #1a1b1f;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.painel-cabecalho h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--color-ivory);
+}
+
+/* Card 1: Seleção de Modelos e Cores */
+.seletor-modelos {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-modelo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  padding: 10px 14px;
+  color: var(--color-ivory);
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.25s var(--ease-mechanical);
+}
+
+.btn-modelo:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.btn-modelo.ativo {
+  background: rgba(236, 231, 218, 0.08);
+  border-color: var(--creme-etiqueta);
+}
+
+.modelo-icone {
+  display: flex;
+  font-size: 22px;
+  color: var(--creme-etiqueta);
+}
+
+.modelo-dados {
+  display: flex;
+  flex-direction: column;
+}
+
+.modelo-dados strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.preco-tag {
+  font-size: 13px;
+  color: var(--color-ash);
+}
+
+.sublabel {
+  font-size: 13px;
+  color: var(--color-ash);
+  font-weight: 500;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.bolinhas-grid {
+  display: flex;
+  gap: 10px;
+}
+
+.bolinha {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--c);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  transition: transform 0.2s var(--ease-spring), box-shadow 0.2s ease;
+}
+
+.bolinha:hover {
+  transform: scale(1.15);
+}
+
+.bolinha.ativa {
+  box-shadow: 0 0 0 2px var(--bg-workshop), 0 0 0 4px var(--c);
+  transform: scale(1.1);
+}
+
+/* Aviso de pedidos em quantidade, no pé do cartão de modelos */
+.nota-quantidade {
+  margin-top: auto;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--color-ash);
+}
+
+/* Card 2: Papel Sublimático */
+.sublimation-paper {
+  position: relative;
+  background: #fdfdf9;
+  color: #171721;
+  border: 1px dashed #c0c0c8;
+  border-radius: 10px;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  min-height: 140px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.sublimation-paper:hover {
+  transform: translateY(-2px);
+  border-color: var(--tape-blue);
+}
+
+/* Campo de arquivo escondido só visualmente: o teclado ainda chega nele */
+.input-escondido {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Foco do teclado visível no papel quando o campo de arquivo está focado */
+.sublimation-paper:focus-within {
+  outline: 3px solid var(--tape-blue);
+  outline-offset: 3px;
+}
+
+.erro-arte {
+  font-size: 13px;
+  line-height: 1.4;
+  color: #ff8a8a;
+}
+
+/* Fitas Térmicas Azuis nas Pontas */
+.fita-termica {
+  position: absolute;
+  top: -8px;
+  width: 32px;
+  height: 16px;
+  background-color: rgba(41, 121, 255, 0.85);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.fita-canto-esq {
+  left: 14px;
+  transform: rotate(-12deg);
+}
+
+.fita-canto-dir {
+  right: 14px;
+  transform: rotate(10deg);
+}
+
+.paper-icon {
+  font-size: 28px;
+  margin-bottom: 6px;
+  color: #6b6b78;
+}
+
+.paper-content p {
+  font-size: 14px;
+  color: #2b2b36;
+}
+
+.paper-content small {
+  font-size: 12px;
+  color: #727282;
+}
+
+.paper-preview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.paper-preview-container img {
+  max-width: 100px;
+  max-height: 70px;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.badge-papel {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1b8a45;
+  background: #e8f5e9;
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+.btn-sub-action {
+  background: none;
+  border: none;
+  color: #1f4fd1;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.chips-demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip-demo {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-card);
+  color: var(--color-ivory);
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.chip-demo:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Card 3: Display Digital & Alavanca */
+.display-controlador {
+  background: #090a0f;
+  border: 2px solid #232535;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.display-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.display-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-ash);
+  letter-spacing: 0.06em;
+}
+
+.display-led {
+  font-family: var(--font-led);
+  font-size: 38px;
+  line-height: 1;
+  color: var(--led-amber);
+  /* LED de verdade brilha: aqui o brilho é o próprio material */
+  text-shadow: 0 0 6px var(--led-amber-glow);
+}
+
+.led-unit {
+  font-size: 20px;
+  margin-left: 2px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 96px;
+  line-height: 1.25;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-ash);
+}
+
+.led-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--led-green);
+  box-shadow: 0 0 8px var(--led-green-glow);
+  transition: background-color 0.3s ease;
+}
+
+.led-dot.aquecendo {
+  background-color: var(--led-red);
+  box-shadow: 0 0 10px rgba(255, 51, 68, 0.8);
+  animation: blinkFast 0.5s infinite alternate;
+}
+
+@keyframes blinkFast {
+  from { opacity: 0.3; }
+  to { opacity: 1; }
+}
+
+/* O que a prensa faz, logo acima do botão */
+.explica-prensa {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--color-ash);
+}
+
+/* Grande Botão Tátil da Alavanca Mecânica */
+.btn-alavanca {
+  width: 100%;
+  margin-top: auto;
+  padding: 16px 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: linear-gradient(180deg, #303348 0%, #1e202f 100%);
+  color: var(--color-ivory);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.2s var(--ease-mechanical);
+}
+
+.btn-alavanca:not(:disabled):hover {
+  background: linear-gradient(180deg, #3c405a 0%, #25283b 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-alavanca:not(:disabled):active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* Pronto: vira o botão vermelho de máquina, na cor da manopla da prensa */
+.btn-alavanca.pronto-para-prensar {
+  background: linear-gradient(180deg, #d8352f 0%, #b42227 100%);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -3px 0 rgba(0, 0, 0, 0.25);
+}
+
+.btn-alavanca.pronto-para-prensar:not(:disabled):hover {
+  background: linear-gradient(180deg, #e0403a 0%, #bd282d 100%);
+}
+
+.btn-alavanca:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.alavanca-knob {
+  display: flex;
+  font-size: 20px;
+}
+
+/* Respeita o atributo hidden do HTML */
+[hidden],
+.modal-revelacao[hidden],
+.modal-info[hidden] {
+  display: none !important;
+}
+
+/* 5. Modais (Revelação & Info) */
+.modal-revelacao,
+.modal-info {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 9, 14, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 200;
+  animation: fadeIn 0.4s var(--ease-mechanical);
+}
+
+.revelacao-card,
+.info-conteudo {
+  position: relative;
+  background: #18191d;
+  border: 1px solid var(--metal-borda);
+  border-radius: 16px;
+  max-width: 540px;
+  width: 100%;
+  padding: 32px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  text-align: center;
+  animation: scaleUp 0.4s var(--ease-spring);
+  /* Em telas baixas o cartão rola por dentro em vez de ficar cortado */
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.btn-fechar-modal {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: var(--color-ash);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-fechar-modal:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.revelacao-card h2 {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.revelacao-sub {
+  font-size: 14px;
+  color: var(--color-ash);
+  margin-bottom: 20px;
+}
+
+/* Caneca pronta em 3D, sobre fundo de estúdio fotográfico */
+.revelacao-3d {
+  width: 100%;
+  height: 250px;
+  margin-bottom: 20px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: radial-gradient(ellipse 80% 60% at 50% 78%, #f1f2f5 0%, #d6d9e0 45%, #9ea3b0 100%);
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.revelacao-3d:active {
+  cursor: grabbing;
+}
+
+.revelacao-3d canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.pedido-resumo {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-card);
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-around;
+  font-size: 13px;
+}
+
+.resumo-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.resumo-item span {
+  font-size: 12px;
+  color: var(--color-ash);
+}
+
+.resumo-item strong {
+  font-size: 14px;
+  color: var(--color-ivory);
+}
+
+.pedido-quantidade {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--color-ash);
+}
+
+.pedido-quantidade a {
+  color: var(--color-ivory);
+}
+
+/* Sem número de WhatsApp configurado: aviso no lugar do botão de pedir */
+.aviso-sem-canal {
+  padding: 14px 18px;
+  border: 1px solid var(--border-card);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--color-ivory);
+}
+
+.botoes-compra {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn-whatsapp-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #1fa855, #168a44);
+  color: #fff;
+  padding: 16px 24px;
+  border-radius: var(--radius-pill);
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.btn-whatsapp-cta:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #22b55c, #189449);
+}
+
+.botoes-secundarios {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-card);
+  color: var(--color-ivory);
+  padding: 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.btn-tatil-destaque {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  background: rgba(255, 158, 0, 0.12);
+  border: 1px solid rgba(255, 158, 0, 0.4);
+  color: var(--led-amber);
+  padding: 10px 18px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: all 0.2s ease;
+}
+
+.btn-tatil-destaque:hover {
+  background: rgba(255, 158, 0, 0.2);
+}
+
+.foto-ia-render {
+  max-width: 220px;
+  margin-top: 14px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.status-ia {
+  font-size: 13px;
+  color: var(--color-ash);
+  margin-top: 10px;
+}
+
+/* Diferenciais e FAQ no Modal Info */
+.info-conteudo {
+  max-width: 640px;
+  text-align: left;
+}
+
+.info-conteudo h2 {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.diferenciais-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+/* Colunas simples (sem card dentro do card do modal) */
+.dif-card {
+  padding: 4px 2px;
+}
+
+.dif-icone {
+  font-size: 26px;
+  display: block;
+  margin-bottom: 8px;
+  color: var(--led-amber);
+}
+
+.dif-card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.dif-card p {
+  font-size: 13px;
+  color: var(--color-ash);
+  line-height: 1.5;
+}
+
+.faq-bloco h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.faq-bloco details {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-card);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  padding: 12px 14px;
+}
+
+.faq-bloco summary {
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--color-ivory);
+}
+
+.faq-bloco details p {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--color-ash);
+  line-height: 1.55;
+}
+
+/* 6. Rádio lo-fi: gaveta lateral com as playlists */
+.gaveta-lofi {
+  --largura-gaveta: min(340px, calc(100vw - 60px));
+  --capa: var(--creme-etiqueta);
+  position: fixed;
+  top: 50%;
+  left: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  transform: translate(calc(-1 * var(--largura-gaveta)), -50%);
+  transition: transform 0.45s var(--ease-mechanical);
+}
+
+.gaveta-lofi.aberta {
+  transform: translate(0, -50%);
+}
+
+.painel-lofi {
+  width: var(--largura-gaveta);
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background:
+    radial-gradient(circle at calc(100% - 12px) 12px, var(--metal-parafuso) 0 2.5px, transparent 3px),
+    radial-gradient(circle at calc(100% - 12px) calc(100% - 12px), var(--metal-parafuso) 0 2.5px, transparent 3px),
+    var(--metal-chapa);
+  border: 1px solid var(--metal-borda);
+  border-left: none;
+  border-radius: 0 12px 12px 0;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  /* Fechada, sai da ordem do Tab e dos leitores de tela */
+  visibility: hidden;
+  transition: visibility 0s linear 0.45s;
+}
+
+.gaveta-lofi.aberta .painel-lofi {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.painel-lofi-topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.painel-lofi-selo {
+  display: inline-block;
+  padding: 3px 7px;
+  border-radius: 4px;
+  background: var(--creme-etiqueta);
+  color: #1a1b1f;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.painel-lofi-titulo {
+  margin-top: 8px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.painel-lofi .btn-fechar-modal {
+  position: static;
+  flex-shrink: 0;
+}
+
+/* Tocando agora: visor escuro, como o do controlador da prensa */
+.tocando-agora {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  background: #090a0f;
+  border: 2px solid #232535;
+  border-radius: 12px;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.fita-cassete {
+  position: relative;
+  width: 64px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  background: #2b2c31;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Etiqueta da fita, na cor da playlist */
+.fita-cassete::before {
+  content: "";
+  position: absolute;
+  inset: 5px 6px 22px;
+  border-radius: 2px;
+  background: var(--capa);
+  transition: background-color 0.4s ease;
+}
+
+.bobina {
+  position: absolute;
+  bottom: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: conic-gradient(var(--creme-etiqueta) 0 25%, #111 0 50%, var(--creme-etiqueta) 0 75%, #111 0);
+  box-shadow: 0 0 0 2px #111;
+}
+
+.bobina:first-child { left: 13px; }
+.bobina:last-child { right: 13px; }
+
+.gaveta-lofi.tocando .bobina {
+  animation: girarBobina 1.6s linear infinite;
+}
+
+@keyframes girarBobina {
+  to { transform: rotate(360deg); }
+}
+
+.tocando-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.tocando-info strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.tocando-info > span {
+  display: block;
+  font-size: 13px;
+  color: var(--color-ash);
+}
+
+.lofi-progresso {
+  height: 3px;
+  margin-top: 10px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.lofi-progresso span {
+  display: block;
+  height: 100%;
+  background: var(--led-amber);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.lofi-tempos {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-family: var(--font-led);
+  font-size: 17px;
+  line-height: 1;
+  color: var(--led-amber);
+}
+
+.lofi-controles {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-lofi {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-card);
+  color: var(--color-ivory);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-lofi:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-lofi-tocar {
+  width: 48px;
+  height: 48px;
+  font-size: 18px;
+  background: var(--creme-etiqueta);
+  border-color: transparent;
+  color: #1a1b1f;
+}
+
+.btn-lofi-tocar:hover {
+  background: #f6f2e8;
+}
+
+.lofi-volume {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-ash);
+}
+
+.lofi-volume input {
+  width: 84px;
+  accent-color: var(--led-amber);
+}
+
+.lista-playlists {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.playlist-cabeca {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  color: var(--color-ivory);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.playlist-cabeca:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.playlist.ativa .playlist-cabeca {
+  background: rgba(236, 231, 218, 0.08);
+  border-color: var(--creme-etiqueta);
+}
+
+.playlist-capa {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #1a1b1f;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.25)), var(--capa);
+}
+
+.playlist-dados strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.playlist-dados small {
+  display: block;
+  font-size: 12px;
+  color: var(--color-ash);
+}
+
+.playlist-faixas {
+  display: none;
+  list-style: none;
+  margin-top: 4px;
+}
+
+.playlist.ativa .playlist-faixas {
+  display: block;
+}
+
+.faixa {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  color: var(--color-ash);
+  font-family: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.faixa:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-ivory);
+}
+
+.faixa.atual {
+  color: var(--color-ivory);
+  font-weight: 600;
+}
+
+.faixa.atual .faixa-numero {
+  color: var(--led-amber);
+}
+
+.faixa-tempo {
+  font-variant-numeric: tabular-nums;
+}
+
+.lofi-nota {
+  font-size: 12px;
+  color: var(--color-ash);
+}
+
+/* A aba que fica para fora da gaveta */
+.aba-lofi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  min-width: 44px;
+  padding: 14px 10px;
+  margin-left: -1px;
+  background: var(--metal-chapa);
+  border: 1px solid var(--metal-borda);
+  border-left: none;
+  border-radius: 0 12px 12px 0;
+  color: var(--creme-etiqueta);
+  font-family: inherit;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 8px 10px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.aba-lofi:hover {
+  background: linear-gradient(180deg, #2a2b31 0%, #1f2025 100%);
+  color: #fff;
+}
+
+.aba-lofi-rotulo {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Equalizador: parado em cinza; tocando, as barras sobem e descem em âmbar */
+.equalizador {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.equalizador i {
+  width: 3px;
+  height: 12px;
+  border-radius: 1px;
+  background: var(--color-ash);
+  transform: scaleY(0.3);
+  transform-origin: bottom;
+}
+
+.gaveta-lofi.tocando .equalizador i {
+  background: var(--led-amber);
+  animation: equalizar 0.9s ease-in-out infinite alternate;
+}
+
+.gaveta-lofi.tocando .equalizador i:nth-child(2) { animation-delay: -0.3s; }
+.gaveta-lofi.tocando .equalizador i:nth-child(3) { animation-delay: -0.6s; }
+
+@keyframes equalizar {
+  to { transform: scaleY(1); }
+}
+
+/* Animações Globais */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Quem pediu "reduzir movimento" no sistema: sem animações nem transições */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Responsividade Mobile e Tablet */
+/* Celular: repensado para o polegar, não só encolhido */
+@media (max-width: 640px) {
+  /* Cabeçalho só com ícones (os nomes continuam para leitores de tela) */
+  .rotulo-header {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .btn-tatil,
+  .btn-whatsapp-header {
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+    padding: 8px 12px;
+  }
+
+  .oficina-header {
+    top: 10px;
+    width: calc(100% - 20px);
+    padding: 8px 10px 8px 14px;
+  }
+
+  /* Alvos de toque maiores */
+  .bolinha {
+    width: 38px;
+    height: 38px;
+  }
+
+  .bolinhas-grid {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .chip-demo {
+    min-height: 40px;
+    padding: 8px 14px;
+  }
+
+  /* Com a arte pronta, o botão de prensar fica fixo na zona do polegar */
+  .btn-alavanca.pronto-para-prensar {
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    width: auto;
+    z-index: 150;
+  }
+
+  /* Fixo sobre o conteúdo: sólido mesmo enquanto prensa (sem transparência) */
+  .btn-alavanca.pronto-para-prensar:disabled {
+    opacity: 1;
+    filter: saturate(0.35) brightness(0.8);
+  }
+
+  body.modo-oficina {
+    padding-bottom: 96px;
+  }
+
+  .explica-prensa,
+  .nota-quantidade,
+  .faq-bloco details p {
+    font-size: 14px;
+  }
+
+  /* Aba do rádio mais fina, para cobrir menos os cartões */
+  .aba-lofi {
+    min-width: 36px;
+    padding: 12px 8px;
+  }
+
+  .faixa {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 900px) {
+  .oficina-hud {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .viewport-container {
+    height: 380px;
+  }
+
+  .botoes-secundarios {
+    grid-template-columns: 1fr;
+  }
+
+  .diferenciais-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-tag {
+    display: none;
+  }
+}

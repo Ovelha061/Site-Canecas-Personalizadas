@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CANECA+ | Oficina Virtual de Sublimação 3D</title>
+    <meta name="description" content="Prensa térmica virtual interativa para canecas personalizadas. Escolha o modelo, coloque sua arte, acione a prensa e veja a sublimação acontecer em 3D!">
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='logo.png') }}">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="CANECA+">
+    <meta property="og:title" content="CANECA+ | Oficina Virtual de Sublimação 3D">
+    <meta property="og:description" content="Prensa térmica virtual interativa para canecas personalizadas. Escolha o modelo, coloque sua arte, acione a prensa e veja a sublimação acontecer em 3D!">
+    <meta property="og:url" content="{{ request.url_root }}">
+    <meta property="og:image" content="{{ request.url_root }}static/logo.png">
+    <meta property="og:locale" content="pt_BR">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CANECA+ | Oficina Virtual de Sublimação 3D">
+    <meta name="twitter:description" content="Prensa térmica virtual interativa para canecas personalizadas.">
+    <meta name="twitter:image" content="{{ request.url_root }}static/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=VT323&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="modo-oficina">
+
+    <!-- Ícones desenhados (mesmo traço em todos), usados com <use href="#i-..."> -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="i-som" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></symbol>
+        <symbol id="i-mudo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="m16 9 5 6M21 9l-5 6"/></symbol>
+        <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
+        <symbol id="i-conversa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.4A8.5 8.5 0 1 1 21 12z"/></symbol>
+        <symbol id="i-caneca" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 6h11v10a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V6z"/><path d="M16 9h2a3 3 0 0 1 0 6h-2"/></symbol>
+        <symbol id="i-gota" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></symbol>
+        <symbol id="i-brilho" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l1.8 5.2L19 11l-5.2 1.8L12 18l-1.8-5.2L5 11l5.2-1.8z"/><path d="M19 3v3M17.5 4.5h3"/></symbol>
+        <symbol id="i-arquivo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6v18h12V7l-4-4z"/><path d="M14 3v4h4"/><path d="M12 17v-6M9 14l3-3 3 3"/></symbol>
+        <symbol id="i-ligar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v8"/><path d="M6.3 7.3a8 8 0 1 0 11.4 0"/></symbol>
+        <symbol id="i-chama" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2.5 1.5-4 2.5-5 .5 2 1.5 3 2.5 3 0-3-1-5.5 0-8z"/></symbol>
+        <symbol id="i-gelo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M4.2 7.5l15.6 9M19.8 7.5l-15.6 9"/></symbol>
+        <symbol id="i-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+        <symbol id="i-repetir" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/></symbol>
+        <symbol id="i-escudo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6l-7-3z"/><path d="m9 12 2 2 4-4"/></symbol>
+        <symbol id="i-relogio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+        <symbol id="i-fita" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2"/><circle cx="8.5" cy="11" r="1.75"/><circle cx="15.5" cy="11" r="1.75"/><path d="M10.25 11h3.5M7.5 18.5l1.25-3h6.5l1.25 3"/></symbol>
+        <symbol id="i-tocar" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"><path d="M8.5 5.5v13l10-6.5z"/></symbol>
+        <symbol id="i-pausar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5.5v13M15 5.5v13"/></symbol>
+        <symbol id="i-anterior" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 5.5v13"/><path d="M18 6.5 10 12l8 5.5z"/></symbol>
+        <symbol id="i-proxima" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 5.5v13"/><path d="M6 6.5 14 12l-8 5.5z"/></symbol>
+    </svg>
+
+    <!-- Navbar da Oficina -->
+    <header class="oficina-header">
+        <div class="header-esq">
+            <a href="#" class="brand-link">
+                <img src="{{ url_for('static', filename='logo-nav.png') }}" alt="Logo CANECA+" class="logo-badge">
+                <div class="brand-info">
+                    <span class="brand-title">CANECA<span class="brand-plus">+</span></span>
+                    <span class="brand-tag">OFICINA VIRTUAL 3D</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Controles rápidos no topo -->
+        <div class="header-dir">
+            <button type="button" id="btn-som" class="btn-tatil" aria-label="Ligar ou desligar som" title="Efeitos sonoros táteis">
+                <span class="icone-som"><svg class="icone" aria-hidden="true"><use href="#i-som"></use></svg></span> <span class="label-som rotulo-header">Som: Ligado</span>
+            </button>
+            <button type="button" id="btn-info" class="btn-tatil" aria-label="Como funciona">
+                <svg class="icone" aria-hidden="true"><use href="#i-info"></use></svg> <span class="rotulo-header">Como Funciona</span>
+            </button>
+            {% if whatsapp %}
+            <a href="https://wa.me/{{ whatsapp }}" target="_blank" rel="noopener" class="btn-whatsapp-header" aria-label="Falar conosco no WhatsApp">
+                <svg class="icone" aria-hidden="true"><use href="#i-conversa"></use></svg> <span class="rotulo-header">Falar Conosco</span>
+            </a>
+            {% endif %}
+        </div>
+    </header>
+
+    <!-- Palco Principal da Bancada -->
+    <main class="oficina-workbench" id="workbench">
+
+        <!-- 3D Viewport (A Prensa e a Caneca) -->
+        <div class="viewport-container" id="viewport-container">
+            <div id="canvas-3d" aria-label="Prensa térmica e caneca em 3D interativo"></div>
+            
+            <!-- Vapor / Calor Físico -->
+            <div class="steam-container" id="steam-fx" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span>
+            </div>
+
+            <!-- Dica de interação 3D -->
+            <div class="dica-flutuante" id="dica-3d">
+                <span>Arraste para girar · clique na luminária e no rádio</span>
+            </div>
+
+            <!-- Efeito de Flash / Calor da Sublimação -->
+            <div class="heat-glow-overlay" id="heat-glow" aria-hidden="true"></div>
+        </div>
+
+        <!-- Painel de Controle Flutuante da Bancada (HUD) -->
+        <div class="oficina-hud">
+
+            <!-- Card 1: Prateleira de Modelos -->
+            <section class="card-painel" id="painel-modelos">
+                <div class="painel-cabecalho">
+                    <span class="passo-numero">1</span>
+                    <h3>Escolha o modelo</h3>
+                </div>
+
+                <div class="seletor-modelos">
+                    <button type="button" class="btn-modelo ativo" aria-pressed="true" data-modelo="tradicional" data-preco="{{ precos.tradicional }}">
+                        <span class="modelo-icone"><svg class="icone" aria-hidden="true"><use href="#i-caneca"></use></svg></span>
+                        <div class="modelo-dados">
+                            <strong>Tradicional</strong>
+                            <small class="preco-tag">{{ precos.tradicional }}</small>
+                        </div>
+                    </button>
+
+                    <button type="button" class="btn-modelo" aria-pressed="false" data-modelo="colorida" data-preco="{{ precos.colorida }}">
+                        <span class="modelo-icone"><svg class="icone" aria-hidden="true"><use href="#i-gota"></use></svg></span>
+                        <div class="modelo-dados">
+                            <strong>Alça Colorida</strong>
+                            <small class="preco-tag">{{ precos.colorida }}</small>
+                        </div>
+                    </button>
+
+                    <button type="button" class="btn-modelo" aria-pressed="false" data-modelo="magica" data-preco="{{ precos.magica }}">
+                        <span class="modelo-icone"><svg class="icone" aria-hidden="true"><use href="#i-brilho"></use></svg></span>
+                        <div class="modelo-dados">
+                            <strong>Caneca Mágica</strong>
+                            <small class="preco-tag">{{ precos.magica }}</small>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Seletor de cores da alça/borda (aparece quando colorida é selecionada) -->
+                <div class="seletor-cores-wrapper" id="seletor-cores" hidden>
+                    <span class="sublabel">Cor da alça e interior:</span>
+                    <div class="bolinhas-grid">
+                        <button type="button" class="bolinha ativa" aria-pressed="true" data-cor="vermelho" style="--c: #d62828" title="Vermelho" aria-label="Vermelho"></button>
+                        <button type="button" class="bolinha" aria-pressed="false" data-cor="azul" style="--c: #1f4fd1" title="Azul" aria-label="Azul"></button>
+                        <button type="button" class="bolinha" aria-pressed="false" data-cor="preto" style="--c: #1a1a1a" title="Preto" aria-label="Preto"></button>
+                        <button type="button" class="bolinha" aria-pressed="false" data-cor="amarelo" style="--c: #f2c230" title="Amarelo" aria-label="Amarelo"></button>
+                        <button type="button" class="bolinha" aria-pressed="false" data-cor="verde" style="--c: #2a9d4b" title="Verde" aria-label="Verde"></button>
+                        <button type="button" class="bolinha" aria-pressed="false" data-cor="rosa" style="--c: #ec6fa8" title="Rosa" aria-label="Rosa"></button>
+                    </div>
+                </div>
+
+                <!-- Caminho visível para pedidos em quantidade (empresas e eventos) -->
+                <p class="nota-quantidade">Pedido para empresa ou evento? A partir de 20 canecas tem desconto.</p>
+            </section>
+
+            <!-- Card 2: Papel Sublimático (Upload da Arte) -->
+            <section class="card-painel" id="painel-arte">
+                <div class="painel-cabecalho">
+                    <span class="passo-numero">2</span>
+                    <h3>Sua arte para impressão</h3>
+                </div>
+
+                <!-- Zona de Transferência Sublimática com Fita Térmica -->
+                <label for="input-arte" class="sublimation-paper" id="dropzone-arte">
+                    <span class="fita-termica fita-canto-esq"></span>
+                    <span class="fita-termica fita-canto-dir"></span>
+                    
+                    <!-- Escondido só visualmente: continua recebendo foco pelo teclado -->
+                    <input type="file" id="input-arte" class="input-escondido" accept="image/png,image/jpeg,image/webp" aria-describedby="erro-arte">
+                    
+                    <div class="paper-content" id="paper-empty">
+                        <div class="paper-icon"><svg class="icone" aria-hidden="true"><use href="#i-arquivo"></use></svg></div>
+                        <p><strong>Clique ou arraste sua imagem aqui</strong></p>
+                        <small>JPG, PNG ou WEBP (até 8 MB)</small>
+                    </div>
+
+                    <div class="paper-preview-container" id="paper-filled" hidden>
+                        <img id="paper-img-preview" alt="Prévia do papel sublimático">
+                        <span class="badge-papel">✓ Arte pronta no papel</span>
+                        <button type="button" id="btn-trocar-arte" class="btn-sub-action">Trocar imagem</button>
+                    </div>
+                </label>
+
+                <!-- Erro do arquivo, lido em voz alta por leitores de tela -->
+                <p class="erro-arte" id="erro-arte" role="alert" hidden></p>
+
+                <!-- Modelos de teste rápido caso o usuário não tenha arte no momento -->
+                <div class="testes-rapidos">
+                    <span class="sublabel">Ou teste com uma arte pronta:</span>
+                    <div class="chips-demo">
+                        <button type="button" class="chip-demo" data-demo="cafe">Café & Código</button>
+                        <button type="button" class="chip-demo" data-demo="universo">Galáxia Geek</button>
+                        <button type="button" class="chip-demo" data-demo="amor">Melhor Presente</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Card 3: O Painel Eletrônico & Alavanca da Prensa -->
+            <section class="card-painel card-prensa" id="painel-prensa">
+                <div class="painel-cabecalho">
+                    <span class="passo-numero">3</span>
+                    <h3>Controlador da prensa</h3>
+                </div>
+
+                <!-- Visor Digital 7-Segmentos da Prensa Térmica -->
+                <div class="display-controlador">
+                    <div class="display-box">
+                        <span class="display-label">TEMPERATURA</span>
+                        <div class="display-led" id="led-temp">200<span class="led-unit">°C</span></div>
+                    </div>
+                    <div class="display-box">
+                        <span class="display-label">TEMPO</span>
+                        <div class="display-led" id="led-tempo">180<span class="led-unit">s</span></div>
+                    </div>
+                    <div class="status-indicator">
+                        <span class="led-dot" id="led-status"></span>
+                        <span id="label-status">SISTEMA PRONTO</span>
+                    </div>
+                </div>
+
+                <!-- O que "prensar" significa, dito uma vez, no momento da decisão -->
+                <p class="explica-prensa">A prensa aquece a 200 °C e transfere a arte do papel para a cerâmica. Aqui a simulação é acelerada.</p>
+
+                <!-- Grande Botão de Alavanca Mecânica -->
+                <button type="button" id="btn-acionar-prensa" class="btn-alavanca" disabled>
+                    <span class="alavanca-knob"><svg class="icone" aria-hidden="true"><use href="#i-ligar"></use></svg></span>
+                    <span class="alavanca-texto">Envie uma arte para prensar</span>
+                </button>
+            </section>
+        </div>
+    </main>
+
+    <!-- Rádio da oficina: aba lateral com as playlists lo-fi -->
+    <div class="gaveta-lofi" id="gaveta-lofi">
+        <aside class="painel-lofi" id="painel-lofi" aria-labelledby="titulo-lofi">
+            <div class="painel-lofi-topo">
+                <div>
+                    <span class="painel-lofi-selo">Rádio da oficina</span>
+                    <h2 id="titulo-lofi" class="painel-lofi-titulo">Playlists lo-fi</h2>
+                </div>
+                <button type="button" class="btn-fechar-modal" id="btn-fechar-lofi" aria-label="Fechar playlists">&times;</button>
+            </div>
+
+            <!-- Tocando agora: fita cassete na cor da playlist -->
+            <div class="tocando-agora">
+                <div class="fita-cassete" aria-hidden="true"><span class="bobina"></span><span class="bobina"></span></div>
+                <div class="tocando-info">
+                    <strong id="lofi-faixa">Primeiro Gole</strong>
+                    <span id="lofi-playlist">Café na Bancada</span>
+                    <div class="lofi-progresso" aria-hidden="true"><span id="lofi-barra"></span></div>
+                    <div class="lofi-tempos" aria-hidden="true"><span id="lofi-decorrido">0:00</span><span id="lofi-total">1:36</span></div>
+                </div>
+            </div>
+
+            <div class="lofi-controles">
+                <button type="button" class="btn-lofi" id="lofi-anterior" aria-label="Faixa anterior"><svg class="icone" aria-hidden="true"><use href="#i-anterior"></use></svg></button>
+                <button type="button" class="btn-lofi btn-lofi-tocar" id="lofi-tocar" aria-label="Tocar"><svg class="icone" aria-hidden="true"><use href="#i-tocar"></use></svg></button>
+                <button type="button" class="btn-lofi" id="lofi-proxima" aria-label="Próxima faixa"><svg class="icone" aria-hidden="true"><use href="#i-proxima"></use></svg></button>
+                <label class="lofi-volume">
+                    <svg class="icone" aria-hidden="true"><use href="#i-som"></use></svg>
+                    <input type="range" id="lofi-volume" min="0" max="100" value="80" aria-label="Volume do rádio">
+                </label>
+            </div>
+
+            <ul class="lista-playlists" id="lista-playlists"></ul>
+            <p class="lofi-nota">As músicas são criadas na hora pelo seu navegador.</p>
+        </aside>
+
+        <button type="button" class="aba-lofi" id="aba-lofi" aria-expanded="false" aria-controls="painel-lofi" aria-label="Playlists lo-fi">
+            <svg class="icone" aria-hidden="true"><use href="#i-fita"></use></svg>
+            <span class="aba-lofi-rotulo" aria-hidden="true">Lo-fi</span>
+            <span class="equalizador" aria-hidden="true"><i></i><i></i><i></i></span>
+        </button>
+    </div>
+
+    <!-- Modal / Palco de Revelação da Caneca Pronta -->
+    <div class="modal-revelacao" id="modal-revelacao" hidden>
+        <div class="revelacao-card">
+            <button type="button" class="btn-fechar-modal" id="btn-fechar-modal" aria-label="Fechar">&times;</button>
+            
+            <h2>Sua caneca está pronta</h2>
+            <p class="revelacao-sub">Arraste para girar e ver cada detalhe.</p>
+
+            <!-- Caneca pronta em 3D (arraste para girar) -->
+            <div class="revelacao-3d" id="revelacao-3d" aria-label="Sua caneca pronta em 3D. Arraste para girar."></div>
+
+            <!-- Efeito da Caneca Mágica na inspeção -->
+            <div class="acoes-inspecao" id="acoes-magica" hidden>
+                <button type="button" id="btn-aquecer-modal" class="btn-tatil-destaque">
+                    <svg class="icone" aria-hidden="true"><use href="#i-chama"></use></svg> <span class="rotulo-calor">Servir café quente</span>
+                </button>
+            </div>
+
+            <!-- Resumo do Pedido -->
+            <div class="pedido-resumo">
+                <div class="resumo-item">
+                    <span>Modelo</span>
+                    <strong id="resumo-modelo">Tradicional</strong>
+                </div>
+                <div class="resumo-item" id="resumo-cor-item" hidden>
+                    <span>Cor</span>
+                    <strong id="resumo-cor">Vermelho</strong>
+                </div>
+                <div class="resumo-item">
+                    <span>Preço</span>
+                    <strong id="resumo-preco">{{ precos.tradicional }}</strong>
+                </div>
+            </div>
+
+            <!-- Botões de Ação Final -->
+            <div class="botoes-compra">
+                <a id="btn-pedir-whatsapp" class="btn-primary btn-whatsapp-cta" data-whatsapp="{{ whatsapp }}" target="_blank" rel="noopener">
+                    Pedir esta caneca pelo WhatsApp
+                </a>
+
+                <!-- Quando o número do WhatsApp não está configurado, nada de botão morto -->
+                <p class="aviso-sem-canal" id="aviso-sem-canal" hidden>Os pedidos pelo site ainda não estão abertos. Volte em breve: sua caneca fica salva aqui enquanto esta página estiver aberta.</p>
+
+                <div class="botoes-secundarios">
+                    <button type="button" id="btn-baixar-foto" class="btn-secondary">
+                        <svg class="icone" aria-hidden="true"><use href="#i-camera"></use></svg> Baixar foto
+                    </button>
+                    <button type="button" id="btn-ia-upgrade" class="btn-secondary">
+                        <svg class="icone" aria-hidden="true"><use href="#i-brilho"></use></svg> Foto de estúdio com IA
+                    </button>
+                    <button type="button" id="btn-criar-outra" class="btn-secondary">
+                        <svg class="icone" aria-hidden="true"><use href="#i-repetir"></use></svg> Prensar outra caneca
+                    </button>
+                </div>
+            </div>
+
+            <p class="pedido-quantidade">Pedido para empresa ou evento? A partir de 20 canecas tem desconto.{% if whatsapp %} <a href="https://wa.me/{{ whatsapp }}" target="_blank" rel="noopener">Chame no WhatsApp</a>.{% endif %}</p>
+
+            <p id="status-ia-modal" class="status-ia" role="status" hidden></p>
+            <img id="foto-ia-modal" alt="Foto de estúdio da sua caneca, gerada por IA" hidden class="foto-ia-render">
+        </div>
+    </div>
+
+    <!-- Modal Educativo: Como Funciona -->
+    <div class="modal-info" id="modal-info" hidden>
+        <div class="info-conteudo">
+            <button type="button" class="btn-fechar-modal" id="btn-fechar-info">&times;</button>
+            <h2>Como funciona a CANECA+</h2>
+
+            <div class="diferenciais-grid">
+                <div class="dif-card">
+                    <span class="dif-icone"><svg class="icone" aria-hidden="true"><use href="#i-chama"></use></svg></span>
+                    <h3>Sublimação a 200 °C</h3>
+                    <p>A tinta penetra na camada de resina da cerâmica: a estampa fica com brilho vivo e nunca descasca.</p>
+                </div>
+                <div class="dif-card">
+                    <span class="dif-icone"><svg class="icone" aria-hidden="true"><use href="#i-escudo"></use></svg></span>
+                    <h3>Cerâmica Classe AAA</h3>
+                    <p>Material de altíssima qualidade, com acabamento uniforme e sem imperfeições.</p>
+                </div>
+                <div class="dif-card">
+                    <span class="dif-icone"><svg class="icone" aria-hidden="true"><use href="#i-relogio"></use></svg></span>
+                    <h3>Pronta em 5 a 7 dias úteis</h3>
+                    <p>Depois do pedido confirmado, produzimos e despachamos em 5 a 7 dias úteis, para todo o Brasil.</p>
+                </div>
+            </div>
+
+            <div class="faq-bloco">
+                <h3>Dúvidas frequentes</h3>
+                <details>
+                    <summary>Quanto custa o frete e quanto demora?</summary>
+                    <p>O frete é calculado pelo seu CEP, com envio para todo o Brasil. A produção leva de 5 a 7 dias úteis depois do pedido confirmado; o prazo de entrega depende da sua região.</p>
+                </details>
+                <details>
+                    <summary>Quais são as formas de pagamento?</summary>
+                    <p>Pix e cartão de crédito.</p>
+                </details>
+                <details>
+                    <summary>Como envio minha arte para a produção?</summary>
+                    <p>Monte sua caneca aqui na oficina e toque em "Pedir esta caneca pelo WhatsApp": a sua arte, o modelo, a cor e o preço já vão junto, com um código do pedido. Não precisa reenviar o arquivo.</p>
+                </details>
+                <details>
+                    <summary>Pode ir ao micro-ondas e à lava-louças?</summary>
+                    <p>A Tradicional e a Alça Colorida, sim: podem ir ao micro-ondas e à lava-louças. A Caneca Mágica é termossensível: lave com cuidado, sem esponja de aço.</p>
+                </details>
+                <details>
+                    <summary>Vocês fazem pedidos em grande quantidade?</summary>
+                    <p>Sim. Canecas para empresas, brindes de eventos e lembrancinhas têm desconto progressivo a partir de 20 unidades. Chame no WhatsApp para um orçamento.</p>
+                </details>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bibliotecas Externas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <!-- Modelos 3D realistas da caneca e da prensa -->
+    <script src="{{ url_for('static', filename='caneca3d.js') }}"></script>
+    <script src="{{ url_for('static', filename='prensa3d.js') }}"></script>
+    <script src="{{ url_for('static', filename='bancada3d.js') }}"></script>
+    <script src="{{ url_for('static', filename='lofi.js') }}"></script>
+
+    <!-- Script da Oficina Virtual -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
